@@ -1,0 +1,11 @@
+<h1>日記一覧</h1>
+
+<%= link_to "新規作成", new_diary_entry_path %>
+
+<ul>
+  <% @diary_entries.each do |entry| %>
+    <li>
+      <%= link_to entry.entry_date, diary_entry_path(entry) %>
+    </li>
+  <% end %>
+</ul>

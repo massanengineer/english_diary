@@ -1,0 +1,24 @@
+<%= form_with model: diary_entry do |f| %>
+  <% if diary_entry.errors.any? %>
+    <div>
+      <h2><%= diary_entry.errors.count %>件のエラーがあります</h2>
+      <ul>
+        <% diary_entry.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= f.label :entry_date, "日付" %>
+    <%= f.date_field :entry_date %>
+  </div>
+
+  <div>
+    <%= f.label :content, "日記本文" %>
+    <%= f.text_area :content, rows: 8 %>
+  </div>
+
+  <%= f.submit %>
+<% end %>
