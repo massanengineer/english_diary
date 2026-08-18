@@ -1,6 +1,23 @@
 <h1><%= @diary_entry.entry_date %></h1>
 
+<h2>日本語</h2>
 <p><%= @diary_entry.content %></p>
+
+<h2>Natural English</h2>
+<% if @diary_entry.english_content.present? %>
+  <p><%= @diary_entry.english_content %></p>
+<% else %>
+  <p>まだ英訳されていません</p>
+<% end %>
+
+<% if @diary_entry.vocabularies.any? %>
+  <h2>覚えておきたい表現</h2>
+  <ul>
+    <% @diary_entry.vocabularies.each do |vocabulary| %>
+      <li><%= vocabulary.phrase %>（<%= vocabulary.meaning_ja %>）</li>
+    <% end %>
+  </ul>
+<% end %>
 
 <%= link_to "編集", edit_diary_entry_path(@diary_entry) %>
 <%= link_to "一覧に戻る", diary_entries_path %>

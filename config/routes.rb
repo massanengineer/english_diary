@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   resources :diary_entries
+  get "calendar(/:year/:month)" => "diary_entries#calendar", as: :calendar
   root "diary_entries#index"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

@@ -1,0 +1,32 @@
+<h1><%= @year %>年<%= @month %>月</h1>
+
+<%= link_to "← 前の月", calendar_path(year: @prev_year, month: @prev_month) %>
+<%= link_to "次の月 →", calendar_path(year: @next_year, month: @next_month) %>
+
+<table>
+  <thead>
+    <tr>
+      <% %w[日 月 火 水 木 金 土].each do |wday| %>
+        <th><%= wday %></th>
+      <% end %>
+    </tr>
+  </thead>
+  <tbody>
+    <% calendar_weeks(@year, @month).each do |week| %>
+      <tr>
+        <% week.each do |date| %>
+          <td>
+            <% if date %>
+              <%= date.day %>
+              <% if entry = @entries_by_date[date] %>
+                <%= link_to "●", diary_entry_path(entry) %>
+              <% else %>
+                <%= link_to "＋", new_diary_entry_path(entry_date: date) %>
+              <% end %>
+            <% end %>
+          </td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

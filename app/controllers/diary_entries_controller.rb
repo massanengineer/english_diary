@@ -8,7 +8,7 @@ class DiaryEntriesController < ApplicationController
   end
 
   def new
-    @diary_entry = DiaryEntry.new
+    @diary_entry = DiaryEntry.new(entry_date: params[:entry_date])
   end
 
   def create
@@ -37,6 +37,22 @@ class DiaryEntriesController < ApplicationController
     @diary_entry = DiaryEntry.find(params[:id])
     @diary_entry.destroy
     redirect_to diary_entries_path, notice: "日記を削除しました"
+  end
+
+  def calendar
+    @year = (params[:year] || Date.today.year).to_i
+    @month = (params[:month] || Date.today.month).to_i
+
+    start_date = Date.new(@year, @month, 1)
+    end_date = start_date.end_of_month
+
+    entries = DiaryEntry.where(entry_date: start_date..end_date)
+    @entries_by_date = entries.index_by(&:entry_date)
+
+    prev_month_date = start_date.prev_month
+    next_month_date = start_date.next_month
+    @prev_year, @prev_month = prev_month_date.year, prev_month_date.month
+    @next_year, @next_month = next_month_date.year, next_month_date.month
   end
 
   private
