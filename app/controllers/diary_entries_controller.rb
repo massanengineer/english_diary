@@ -55,6 +55,22 @@ class DiaryEntriesController < ApplicationController
     @next_year, @next_month = next_month_date.year, next_month_date.month
   end
 
+  def translate
+    @diary_entry = DiaryEntry.find(params[:id])
+    result = GeminiTranslationService.call(@diary_entry.content)
+
+    @diary_entry.update(english_content: result["translation"])
+
+    result["vocabulary"].each do |item|
+      vocabulary = Vocabulary.find_or_create_by(phrase: item["phrase"]) do |v|
+        v.meaning_ja = item["meaning_ja"]
+      end
+      @diary_entry.vocabularies << vocabulary unless @diary_entry.vocabularies.include?(vocabulary)
+    end
+
+    redirect_to @diary_entry, notice: "英語に変換しました"
+  end
+
   private
 
   def diary_entry_params

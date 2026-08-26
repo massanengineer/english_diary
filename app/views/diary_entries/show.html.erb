@@ -4,6 +4,8 @@
 <p><%= @diary_entry.content %></p>
 
 <h2>Natural English</h2>
+<%= button_to "AIで英語に変換する", translate_diary_entry_path(@diary_entry), method: :post %>
+
 <% if @diary_entry.english_content.present? %>
   <p><%= @diary_entry.english_content %></p>
 <% else %>
