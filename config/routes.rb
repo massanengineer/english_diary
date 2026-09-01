@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  devise_for :users
   resources :diary_entries
   get "calendar(/:year/:month)" => "diary_entries#calendar", as: :calendar
   root "diary_entries#index"

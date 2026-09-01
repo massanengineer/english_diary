@@ -1,18 +1,20 @@
 class DiaryEntriesController < ApplicationController
+  before_action :authenticate_user!
+
   def index
-    @diary_entries = DiaryEntry.order(entry_date: :desc)
+    @diary_entries = current_user.diary_entries.order(entry_date: :desc)
   end
 
   def show
-    @diary_entry = DiaryEntry.find(params[:id])
+    @diary_entry = current_user.diary_entries.find(params[:id])
   end
 
   def new
-    @diary_entry = DiaryEntry.new(entry_date: params[:entry_date])
+    @diary_entry = current_user.diary_entries.new(entry_date: params[:entry_date])
   end
 
   def create
-    @diary_entry = DiaryEntry.new(diary_entry_params)
+    @diary_entry = current_user.diary_entries.new(diary_entry_params)
     if @diary_entry.save
       redirect_to @diary_entry, notice: "日記を保存しました"
     else
@@ -21,11 +23,11 @@ class DiaryEntriesController < ApplicationController
   end
 
   def edit
-    @diary_entry = DiaryEntry.find(params[:id])
+    @diary_entry = current_user.diary_entries.find(params[:id])
   end
 
   def update
-    @diary_entry = DiaryEntry.find(params[:id])
+    @diary_entry = current_user.diary_entries.find(params[:id])
     if @diary_entry.update(diary_entry_params)
       redirect_to @diary_entry, notice: "日記を更新しました"
     else
@@ -34,9 +36,15 @@ class DiaryEntriesController < ApplicationController
   end
 
   def destroy
-    @diary_entry = DiaryEntry.find(params[:id])
+    @diary_entry = current_user.diary_entries.find(params[:id])
     @diary_entry.destroy
     redirect_to diary_entries_path, notice: "日記を削除しました"
+  end
+
+  def translate
+    @diary_entry = current_user.diary_entries.find(params[:id])
+    TranslateDiaryEntryJob.perform_later(@diary_entry.id)
+    redirect_to @diary_entry, notice: "AI変換を開始しました。数秒後にページを更新してみてください"
   end
 
   def calendar
@@ -46,29 +54,13 @@ class DiaryEntriesController < ApplicationController
     start_date = Date.new(@year, @month, 1)
     end_date = start_date.end_of_month
 
-    entries = DiaryEntry.where(entry_date: start_date..end_date)
+    entries = current_user.diary_entries.where(entry_date: start_date..end_date)
     @entries_by_date = entries.index_by(&:entry_date)
 
     prev_month_date = start_date.prev_month
     next_month_date = start_date.next_month
     @prev_year, @prev_month = prev_month_date.year, prev_month_date.month
     @next_year, @next_month = next_month_date.year, next_month_date.month
-  end
-
-  def translate
-    @diary_entry = DiaryEntry.find(params[:id])
-    result = GeminiTranslationService.call(@diary_entry.content)
-
-    @diary_entry.update(english_content: result["translation"])
-
-    result["vocabulary"].each do |item|
-      vocabulary = Vocabulary.find_or_create_by(phrase: item["phrase"]) do |v|
-        v.meaning_ja = item["meaning_ja"]
-      end
-      @diary_entry.vocabularies << vocabulary unless @diary_entry.vocabularies.include?(vocabulary)
-    end
-
-    redirect_to @diary_entry, notice: "英語に変換しました"
   end
 
   private
