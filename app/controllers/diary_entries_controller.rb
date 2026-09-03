@@ -3,6 +3,12 @@ class DiaryEntriesController < ApplicationController
 
   def index
     @diary_entries = current_user.diary_entries.order(entry_date: :desc)
+    @total_entries = @diary_entries.count
+    @streak = current_user.diary_streak
+    @vocabulary_count = Vocabulary.joins(:diary_entries)
+                                  .where(diary_entries: { user_id: current_user.id })
+                                  .distinct
+                                  .count
   end
 
   def show
