@@ -13,16 +13,26 @@
   </div>
 </div>
 
-<%= link_to "カレンダーで見る", calendar_path %>
+<div class="page-actions">
+  <h1>日記一覧</h1>
+  <div>
+    <%= link_to "カレンダーで見る", calendar_path, class: "btn-secondary" %>
+    <%= link_to "新規作成", new_diary_entry_path, class: "btn-primary" %>
+  </div>
+</div>
 
-<h1>日記一覧</h1>
-
-<%= link_to "新規作成", new_diary_entry_path %>
-
-<ul>
+<ul class="entry-list">
   <% @diary_entries.each do |entry| %>
-    <li>
-      <%= link_to entry.entry_date, diary_entry_path(entry) %>
+    <li class="entry-card">
+      <%= link_to diary_entry_path(entry), class: "entry-card-link" do %>
+        <span class="entry-date"><%= entry.entry_date.strftime("%Y年%m月%d日") %></span>
+        <span class="entry-snippet"><%= truncate(entry.content, length: 40) %></span>
+        <% if entry.english_content.present? %>
+          <span class="badge-translated">英訳済み</span>
+        <% else %>
+          <span class="badge-untranslated">未変換</span>
+        <% end %>
+      <% end %>
     </li>
   <% end %>
 </ul>

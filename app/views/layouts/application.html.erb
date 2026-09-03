@@ -24,13 +24,36 @@
   </head>
 
   <body>
-    <% if user_signed_in? %>
-      <%= current_user.email %>さん
-      <%= button_to "ログアウト", destroy_user_session_path, method: :delete %>
-    <% else %>
-      <%= link_to "ログイン", new_user_session_path %>
-      <%= link_to "新規登録", new_user_registration_path %>
-    <% end %>
-    <%= yield %>
+    <header class="site-header">
+      <div class="header-inner container">
+        <div>
+          <%= link_to "英語翻訳日記", root_path, class: "site-title" %>
+          <p class="site-tagline">日々の日本語を、伝わる英語に。</p>
+        </div>
+
+        <nav>
+          <% if user_signed_in? %>
+            <%= link_to "日記一覧", diary_entries_path %>
+            <%= link_to "カレンダー", calendar_path %>
+            <span class="user-email"><%= current_user.email %>さん</span>
+            <%= button_to "ログアウト", destroy_user_session_path, method: :delete %>
+          <% else %>
+            <%= link_to "ログイン", new_user_session_path %>
+            <%= link_to "新規登録", new_user_registration_path %>
+          <% end %>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      <% if notice %>
+        <p class="flash-notice"><%= notice %></p>
+      <% end %>
+      <% if alert %>
+        <p class="flash-alert"><%= alert %></p>
+      <% end %>
+
+      <%= yield %>
+    </main>
   </body>
 </html>

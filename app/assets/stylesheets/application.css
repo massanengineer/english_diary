@@ -8,46 +8,290 @@
  *
  * Consider organizing styles into separate files for maintainability.
  */
+@import url('https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap');
 
- .calendar-table {
+:root {
+  --paper: #F3EFE4;
+  --paper-card: #FBF9F2;
+  --paper-line: #DBD2BE;
+  --ink: #202B38;
+  --muted-ink: #756B5C;
+  --indigo: #2F4C7A;
+  --indigo-deep: #1B324F;
+  --crimson: #A73B3B;
+  --moss: #626F44;
+  --moss-bg: rgba(98, 111, 68, 0.12);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.site-header {
+  background: var(--paper-card);
+  border-bottom: 1px solid var(--paper-line);
+}
+
+.header-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 16px 24px;
+}
+
+.site-title {
+  font-family: 'Shippori Mincho', serif;
+  font-size: 24px;
+  font-weight: 700;
+  text-decoration: none;
+  color: var(--ink);
+}
+
+.site-tagline {
+  margin: 0;
+  font-size: 12px;
+  color: var(--muted-ink);
+}
+
+nav {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 14px;
+}
+
+.user-email {
+  color: var(--muted-ink);
+}
+
+.flash-notice {
+  background: var(--moss-bg);
+  color: var(--moss);
+  padding: 10px 16px;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.flash-alert {
+  background: rgba(167, 59, 59, 0.1);
+  color: var(--crimson);
+  padding: 10px 16px;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Zen Kaku Gothic New', sans-serif;
+  margin: 0;
+  line-height: 1.7;
+}
+
+h1, h2, h3 {
+  font-family: 'Shippori Mincho', serif;
+}
+
+a {
+  color: var(--indigo);
+}
+
+.container {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+
+.calendar-page { max-width: 640px; }
+
+.cal-nav {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.cal-nav-link {
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.calendar-table {
   border-collapse: collapse;
   width: 100%;
-  max-width: 600px;
   table-layout: fixed;
+  background: var(--paper-card);
+  border: 1px solid var(--paper-line);
+  border-radius: 6px;
+  overflow: hidden;
 }
 
 .calendar-table th,
 .calendar-table td {
-  border: 1px solid #ddd;
+  border: 1px solid var(--paper-line);
   text-align: center;
   padding: 8px;
-  height: 60px;
+  height: 64px;
   vertical-align: top;
 }
 
 .calendar-table th {
-  background: #f5f5f5;
-  font-weight: bold;
+  background: var(--paper);
+  font-family: 'Shippori Mincho', serif;
+  font-weight: 700;
+  color: var(--muted-ink);
+  font-size: 13px;
 }
 
 .calendar-table td.today {
-  background: #fff8e1;
-  font-weight: bold;
+  background: rgba(47, 76, 122, 0.08);
 }
 
 .day-number {
   display: block;
-  font-size: 14px;
+  font-size: 13px;
+  color: var(--ink);
+  margin-bottom: 4px;
 }
 
 .entry-link {
-  color: #2f4c7a;
+  color: var(--indigo);
   text-decoration: none;
   font-size: 18px;
 }
 
 .new-entry-link {
-  color: #bbb;
+  color: var(--paper-line);
   text-decoration: none;
+  font-size: 14px;
+}
+.new-entry-link:hover {
+  color: var(--muted-ink);
+}
+
+/* ------------------------------ */
+
+.stats {
+  display: flex;
+  justify-content: space-around;
+  background: var(--paper-card);
+  border: 1px solid var(--paper-line);
+  border-radius: 6px;
+  padding: 16px;
+  margin-bottom: 24px;
+}
+.stat { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.stat-num { font-family: 'Shippori Mincho', serif; font-size: 26px; color: var(--indigo-deep); }
+.stat-label { font-size: 12px; color: var(--muted-ink); }
+
+.btn-primary, .btn-secondary, .btn-danger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 18px;
+  font-family: 'Zen Kaku Gothic New', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+}
+.btn-primary { background: var(--indigo); color: var(--paper-card); }
+.btn-primary:hover { background: var(--indigo-deep); }
+.btn-secondary { background: transparent; color: var(--indigo); border: 1px solid var(--indigo); }
+.btn-danger { background: transparent; color: var(--crimson); border: 1px solid var(--crimson); }
+
+.page-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.entry-list { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.entry-card { background: var(--paper-card); border: 1px solid var(--paper-line); border-radius: 6px; }
+.entry-card-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 18px;
+  text-decoration: none;
+  color: var(--ink);
+}
+.entry-date { font-family: 'Shippori Mincho', serif; font-weight: 700; min-width: 130px; }
+.entry-snippet {
+  flex: 1;
+  color: var(--muted-ink);
+  font-size: 14px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.badge-translated, .badge-untranslated {
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.badge-translated { background: var(--moss-bg); color: var(--moss); }
+.badge-untranslated { background: var(--paper-line); color: var(--muted-ink); }
+
+.entry-detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.entry-detail-actions { display: flex; gap: 8px; }
+.content-block {
+  background: var(--paper-card);
+  border: 1px solid var(--paper-line);
+  border-radius: 6px;
+  padding: 18px 20px;
+  margin-top: 16px;
+}
+.english-text { font-family: 'Shippori Mincho', serif; font-size: 16px; line-height: 1.8; }
+.empty-note { color: var(--muted-ink); font-size: 14px; }
+.vocab-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+.vocab-pill {
+  background: var(--moss-bg);
+  color: var(--moss);
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 12px;
+  display: inline-flex;
+  flex-direction: column;
+  line-height: 1.3;
+}
+.vocab-pill em { font-style: normal; color: var(--muted-ink); font-size: 11px; }
+.back-link { display: inline-block; margin-top: 20px; font-size: 14px; }
+
+.form-group { margin-bottom: 16px; display: flex; flex-direction: column; gap: 6px; }
+.form-group label { font-size: 13px; color: var(--muted-ink); }
+.form-group input,
+.form-group textarea {
+  border: 1px solid var(--paper-line);
+  border-radius: 4px;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Zen Kaku Gothic New', sans-serif;
+  font-size: 14px;
+  padding: 10px 12px;
+}
+.form-group textarea { resize: vertical; line-height: 1.7; }
+.form-errors {
+  background: rgba(167, 59, 59, 0.1);
+  border: 1px solid var(--crimson);
+  color: var(--crimson);
+  border-radius: 4px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
   font-size: 14px;
 }

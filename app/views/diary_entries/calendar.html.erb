@@ -1,34 +1,39 @@
-<%= link_to "一覧で見る", diary_entries_path %>
+<div class="calendar-page">
+  <div class="page-actions">
+    <h1><%= @year %>年<%= @month %>月</h1>
+    <%= link_to "一覧で見る", diary_entries_path, class: "btn-secondary" %>
+  </div>
 
-<h1><%= @year %>年<%= @month %>月</h1>
+  <div class="cal-nav">
+    <%= link_to "← 前の月", calendar_path(year: @prev_year, month: @prev_month), class: "cal-nav-link" %>
+    <%= link_to "次の月 →", calendar_path(year: @next_year, month: @next_month), class: "cal-nav-link" %>
+  </div>
 
-<%= link_to "← 前の月", calendar_path(year: @prev_year, month: @prev_month) %>
-<%= link_to "次の月 →", calendar_path(year: @next_year, month: @next_month) %>
-
-<table class="calendar-table">
-  <thead>
-    <tr>
-      <% %w[日 月 火 水 木 金 土].each do |wday| %>
-        <th><%= wday %></th>
-      <% end %>
-    </tr>
-  </thead>
-  <tbody>
-    <% calendar_weeks(@year, @month).each do |week| %>
+  <table class="calendar-table">
+    <thead>
       <tr>
-        <% week.each do |date| %>
-          <td class="<%= 'today' if date == Date.today %>">
-            <% if date %>
-              <span class="day-number"><%= date.day %></span>
-              <% if entry = @entries_by_date[date] %>
-                <%= link_to "●", diary_entry_path(entry), class: "entry-link" %>
-              <% else %>
-                <%= link_to "＋", new_diary_entry_path(entry_date: date), class: "new-entry-link" %>
-              <% end %>
-            <% end %>
-          </td>
+        <% %w[日 月 火 水 木 金 土].each do |wday| %>
+          <th><%= wday %></th>
         <% end %>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      <% calendar_weeks(@year, @month).each do |week| %>
+        <tr>
+          <% week.each do |date| %>
+            <td class="<%= 'today' if date == Date.today %>">
+              <% if date %>
+                <span class="day-number"><%= date.day %></span>
+                <% if entry = @entries_by_date[date] %>
+                  <%= link_to "●", diary_entry_path(entry), class: "entry-link" %>
+                <% else %>
+                  <%= link_to "＋", new_diary_entry_path(entry_date: date), class: "new-entry-link" %>
+                <% end %>
+              <% end %>
+            </td>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
