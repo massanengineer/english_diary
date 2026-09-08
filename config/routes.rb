@@ -3,6 +3,8 @@ Rails.application.routes.draw do
   resources :diary_entries
   get "calendar(/:year/:month)" => "diary_entries#calendar", as: :calendar
   root "diary_entries#index"
+
+  post "guest_sign_in", to: "guest_sessions#create"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

@@ -4,7 +4,14 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
   has_many :diary_entries, dependent: :destroy
-  
+
+  def self.guest
+    find_or_create_by!(email: "guest@example.com") do |user|
+      user.password = SecureRandom.urlsafe_base64
+      user.guest = true
+    end
+  end
+
   def diary_streak
     dates = diary_entries.order(entry_date: :desc).pluck(:entry_date)
     return 0 if dates.empty?
