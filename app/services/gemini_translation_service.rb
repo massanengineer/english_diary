@@ -109,6 +109,12 @@ class GeminiTranslationService
   def parse_response(response)
     body = JSON.parse(response.body)
     raw_text = body.dig("candidates", 0, "content", "parts", 0, "text")
+
+    if raw_text.nil?
+      Rails.logger.error("Gemini API unexpected response: #{response.body}")
+      raise "Gemini API unexpected response"
+    end
+
     cleaned = raw_text.gsub(/\A```json/, "").gsub(/```\z/, "").strip
     JSON.parse(cleaned)
   end
