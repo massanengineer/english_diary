@@ -12,33 +12,8 @@
     <p><%= @diary_entry.content %></p>
   </section>
 
-  <section class="content-block">
-    <h2>Natural English</h2>
-    <% if @diary_entry.english_content.present? %>
-      <p class="english-text"><%= @diary_entry.english_content %></p>
-    <% else %>
-      <p class="empty-note">まだ英訳されていません</p>
-      <%= button_to "AIで英語に変換する", translate_diary_entry_path(@diary_entry), method: :post, class: "btn-primary" %>
-    <% end %>
-  </section>
-
-  <% if @diary_entry.vocabularies.any? %>
-    <section class="content-block">
-      <h2>覚えておきたい表現</h2>
-      <div class="vocab-pills">
-        <% @diary_entry.vocabularies.each do |vocabulary| %>
-          <span class="vocab-pill">
-            <%= vocabulary.phrase %>
-            <em><%= vocabulary.meaning_ja %></em>
-          </span>
-        <% end %>
-      </div>
-    </section>
-  <% end %>
-
-  <% if @diary_entry.english_content.present? %>
-    <%= button_to "英語に再変換する", translate_diary_entry_path(@diary_entry), method: :post, class: "btn-secondary" %>
-  <% end %>
+  <%= turbo_stream_from @diary_entry %>
+  <%= render "translation", diary_entry: @diary_entry %>
 
   <%= link_to "← 一覧に戻る", diary_entries_path, class: "back-link" %>
 </div>

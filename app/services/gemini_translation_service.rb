@@ -2,6 +2,8 @@ require "net/http"
 require "uri"
 
 class GeminiTranslationService
+  class RateLimitedError < StandardError; end
+
   ENDPOINT = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent"
 
   def self.call(japanese_text)
@@ -14,10 +16,24 @@ class GeminiTranslationService
 
   def call
     response = request_gemini
-    parse_response(response)
+    handle_response(response)
   end
 
   private
+
+  def handle_response(response)
+    case response.code.to_i
+    when 200
+      parse_response(response)
+    when 429, 503
+      Rails.logger.warn("Gemini API temporarily unavailable (#{response.code}): #{response.body}")
+      raise RateLimitedError, "Gemini API returned #{response.code}"
+    else
+      Rails.logger.error("Gemini API unexpected response (#{response.code}): #{response.body}")
+      raise "Gemini API unexpected response"
+    end
+  end
+
 
   def request_gemini
     uri = URI(ENDPOINT)
