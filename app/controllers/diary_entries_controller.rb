@@ -50,7 +50,7 @@ class DiaryEntriesController < ApplicationController
   def translate
     @diary_entry = current_user.diary_entries.find(params[:id])
     TranslateDiaryEntryJob.perform_later(@diary_entry.id)
-    redirect_to @diary_entry, notice: "AI変換を開始しました。数秒後にページを更新してみてください"
+    redirect_to @diary_entry, notice: "AI変換を開始しました。数秒お待ちください"
   end
 
   def calendar
