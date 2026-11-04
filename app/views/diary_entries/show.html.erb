@@ -1,0 +1,19 @@
+<div class="entry-detail">
+  <div class="entry-detail-header">
+    <h1><%= @diary_entry.entry_date.strftime("%Y年%m月%d日") %></h1>
+    <div class="entry-detail-actions">
+      <%= link_to "編集", edit_diary_entry_path(@diary_entry), class: "btn-secondary" %>
+      <%= button_to "削除", diary_entry_path(@diary_entry), method: :delete, class: "btn-danger" %>
+    </div>
+  </div>
+
+  <section class="content-block">
+    <h2>日本語</h2>
+    <p><%= @diary_entry.content %></p>
+  </section>
+
+  <%= turbo_stream_from @diary_entry %>
+  <%= render "translation", diary_entry: @diary_entry %>
+
+  <%= link_to "← 一覧に戻る", diary_entries_path, class: "back-link" %>
+</div>
